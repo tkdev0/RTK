@@ -24,14 +24,14 @@ Config = {
     -- This is used only to facilitate beta testing.
     -- Default value is false.
     -- ---------------------------------------------------------------------------
-    freeNpcSubpathsEnabled = true,
+    freeNpcSubpathsEnabled = false,
 
 	-- -------------------------------------------------------------------------
 	-- Allows non-GM players to alter their stats and to spawn items on demand.
     -- This is used only to facilitate beta testing.
     -- Default value is false.
 	-- -------------------------------------------------------------------------
-	freeStatsAndItemsEnabled = true,
+	freeStatsAndItemsEnabled = false,
 
     -- -----------------------------------------------------------------------------    
     -- When enabled, a Love or Blood stone can be used to teleport to one's partner
@@ -58,7 +58,7 @@ Config = {
     -- rewritten. Disabling them isn't ideal but can help with performance in a pinch.
     -- Default value is true.
     -- ---------------------------------------------------------------------------------
-    loggingEnabled = false,
+    loggingEnabled = true,
 
     -- ------------------------------------------------------------------------------
     -- The number of milliseconds after using a Love or Blood stone before it can be

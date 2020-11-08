@@ -214,26 +214,26 @@ int config_read(const char* cfg_file) {
 			else if (strcmpi(r1, "save_pw") == 0) {
 				strncpy(save_pw, r2, 32);
 				save_pw[31] = '\0';
-#ifdef USE_MYSQL
-				//SQL
 			}
+#ifdef USE_MYSQL
+			//SQL
 			else if (strcmpi(r1, "sql_ip") == 0) {
-				strcpy(sql_ip, r2);
+				strcpy(sql_ip, getenv("MYSQL_IP"));
 			}
 			else if (strcmpi(r1, "sql_port") == 0) {
 				sql_port = atoi(r2);
 			}
 			else if (strcmpi(r1, "sql_id") == 0) {
-				strcpy(sql_id, r2);
+				strcpy(sql_id, getenv("MYSQL_USER"));
 			}
 			else if (strcmpi(r1, "sql_pw") == 0) {
-				strcpy(sql_pw, r2);
+				strcpy(sql_pw, getenv("MYSQL_PASSWORD"));
 			}
 			else if (strcmpi(r1, "sql_db") == 0) {
-				strcpy(sql_db, r2);
+				strcpy(sql_db, getenv("MYSQL_DATABASE"));
+			}
 #endif
 				//DUMP & LOG
-			}
 			else if (strcmpi(r1, "char_log") == 0) {
 				set_logfile(r2);
 			}
@@ -315,6 +315,7 @@ int do_init(int argc, char** argv) {
 	set_defaultparse(mapif_parse_auth);
 	char_fd = make_listen_port(char_port);
 
+	printf("Connecting to login server at %s:%d\n", login_ip_s, login_port);
 	timer_insert(1000, 1000 * 10, check_connect_login, login_ip, login_port);
 	//timer_insert(1000,1000,check_connect_save, save_ip, save_port);
 	//timer_insert(5000,5000,keep_login_alive,0,0);

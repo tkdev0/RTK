@@ -118,7 +118,7 @@ luac.out
 !/rtk/logs-archive/.gitignore
 
 # Lua log files
-/rtklua/History/logs/**/*.txt
+/rtklua/History/logs/**/*.txt*
 
 # Meta data
 /rtk/metan
@@ -137,5 +137,6 @@ luac.out
 # ddraw.dll
 !ddraw.dll
 
-# Database backups
-/database/history/*.sql
+# Database
+/database/history/*.tgz
+/database/data

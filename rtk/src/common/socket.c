@@ -911,7 +911,7 @@ void log_start(int fd, char* func) {
 		}
 	}
 	FILE* fp = NULL;
-	fp = fopen("function-log.txt", "a");
+	fp = fopen("logs/function-log.txt", "a");
 	if (fp != NULL)
 	{
 		if (t) {
@@ -932,7 +932,7 @@ void log_stop(int fd, char* func) {
 		}
 	}
 	FILE* fp = NULL;
-	fp = fopen("function-log.txt", "a");
+	fp = fopen("logs/function-log.txt", "a");
 	if (fp != NULL)
 	{
 		if (t) {

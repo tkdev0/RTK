@@ -48,21 +48,20 @@ int config_read(const char* cfg_file) {
 
 		if (sscanf(line, "%[^:]: %[^\r\n]", r1, r2) == 2) {
 			//CHAR
-
 			if (strcmpi(r1, "sql_ip") == 0) {
-				strcpy(sql_ip, r2);
+				strcpy(sql_ip, getenv("MYSQL_IP"));
 			}
 			else if (strcmpi(r1, "sql_port") == 0) {
 				sql_port = atoi(r2);
 			}
 			else if (strcmpi(r1, "sql_id") == 0) {
-				strcpy(sql_id, r2);
+				strcpy(sql_id, getenv("MYSQL_USER"));
 			}
 			else if (strcmpi(r1, "sql_pw") == 0) {
-				strcpy(sql_pw, r2);
+				strcpy(sql_pw, getenv("MYSQL_PASSWORD"));
 			}
 			else if (strcmpi(r1, "sql_db") == 0) {
-				strcpy(sql_db, r2);
+				strcpy(sql_db, getenv("MYSQL_DATABASE"));
 			}
 		}
 	}
@@ -90,17 +89,20 @@ int main(int argc, char** argv) {
 	config_read("conf/char.conf");
 	//sql_init();
 	sql_handle = Sql_Malloc();
+	
 	if (sql_handle == NULL)
 	{
 		Sql_ShowDebug(sql_handle);
 		exit(1);
 	}
+
 	if (SQL_ERROR == Sql_Connect(sql_handle, sql_id, sql_pw, sql_ip, (uint16)sql_port, sql_db))
 	{
 		Sql_ShowDebug(sql_handle);
 		Sql_Free(sql_handle);
 		exit(1);
 	}
+	
 	itemdb_init(); //Load itemdb
 	classdb_init(); //Load classdb
 

@@ -185,19 +185,19 @@ int config_read(const char* cfg_file) {
 				nex_deep = atoi(r2);
 			}
 			else if (strcmpi(r1, "sql_ip") == 0) {
-				strcpy(sql_ip, r2);
+				strcpy(sql_ip, getenv("MYSQL_IP"));
 			}
 			else if (strcmpi(r1, "sql_port") == 0) {
 				sql_port = atoi(r2);
 			}
 			else if (strcmpi(r1, "sql_id") == 0) {
-				strcpy(sql_id, r2);
+				strcpy(sql_id, getenv("MYSQL_USER"));
 			}
 			else if (strcmpi(r1, "sql_pw") == 0) {
-				strcpy(sql_pw, r2);
+				strcpy(sql_pw, getenv("MYSQL_PASSWORD"));
 			}
 			else if (strcmpi(r1, "sql_db") == 0) {
-				strcpy(sql_db, r2);
+				strcpy(sql_db, getenv("MYSQL_DATABASE"));
 			}
 			else if (strcmpi(r1, "require_reg") == 0) {
 				require_reg = atoi(r2);
@@ -248,19 +248,22 @@ int do_init(int argc, char** argv) {
 	config_read(INTER_FILE);
 	config_read("conf/char.conf");
 	sql_handle = Sql_Malloc();
+	
 	if (sql_handle == NULL)
 	{
 		Sql_ShowDebug(sql_handle);
 		exit(EXIT_FAILURE);
 	}
+
 	if (SQL_ERROR == Sql_Connect(sql_handle, sql_id, sql_pw, sql_ip, (uint16)sql_port, sql_db))
 	{
-		printf("id: %s pass: %s Port: %d\n", sql_id, sql_pw, sql_port);
+		printf("Failed to connect to %s at %s:%d as '%s'.\n", sql_db, sql_ip, sql_port, sql_id);
 		Sql_ShowDebug(sql_handle);
 		Sql_Free(sql_handle);
 		exit(EXIT_FAILURE);
 	}
 
+	printf("Connected to %s at %s:%d as '%s'.\n", sql_db, sql_ip, sql_port, sql_id);
 	//sql_init();
 	lang_read(LANG_FILE);
 	set_termfunc(do_term);

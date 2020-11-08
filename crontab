@@ -1,0 +1,31 @@
+# Create the folder structure for Lua logging and copy any existing logs
+@reboot   rsync -avh --include='*.txt' --include='*/' --exclude='*' --delete /mnt/rtklua/History /root/rtklua >> /var/log/cron.log 2>&1
+
+# Load a static copy of the Lua
+@reboot   rsync -avh --include='*.lua' --include='*/' --exclude='*' --delete /mnt/rtklua /root >> /var/log/cron.log 2>&1
+
+# Load a static copy of the maps
+@reboot   rsync -avh --include='*.map' --include='*/' --exclude='*' --delete /mnt/rtkmaps/Accepted /root/rtkmaps >> /var/log/cron.log 2>&1
+
+# Start the servers
+@reboot   bash -c "sleep 10; . /root/.env.sh; /root/rtk/check-mithia-server-state >> /var/log/cron.log 2>&1"
+@reboot   bash -c "sleep 20; . /root/.env.sh; /root/rtk/check-mithia-server-state >> /var/log/cron.log 2>&1"
+@reboot   bash -c "sleep 30; . /root/.env.sh; /root/rtk/check-mithia-server-state >> /var/log/cron.log 2>&1"
+@reboot   bash -c "sleep 40; . /root/.env.sh; /root/rtk/check-mithia-server-state >> /var/log/cron.log 2>&1"
+@reboot   bash -c "sleep 50; . /root/.env.sh; /root/rtk/check-mithia-server-state >> /var/log/cron.log 2>&1"
+
+# Restart any failed servers every 10 seconds
+* * * * * bash -c "          . /root/.env.sh; /root/rtk/check-mithia-server-state >> /var/log/cron.log 2>&1"
+* * * * * bash -c "sleep 10; . /root/.env.sh; /root/rtk/check-mithia-server-state >> /var/log/cron.log 2>&1"
+* * * * * bash -c "sleep 20; . /root/.env.sh; /root/rtk/check-mithia-server-state >> /var/log/cron.log 2>&1"
+* * * * * bash -c "sleep 30; . /root/.env.sh; /root/rtk/check-mithia-server-state >> /var/log/cron.log 2>&1"
+* * * * * bash -c "sleep 40; . /root/.env.sh; /root/rtk/check-mithia-server-state >> /var/log/cron.log 2>&1"
+* * * * * bash -c "sleep 50; . /root/.env.sh; /root/rtk/check-mithia-server-state >> /var/log/cron.log 2>&1"
+
+# Copy logs and maps to persistent folders every minute
+* * * * * sleep 15; rsync -ah --include='*.txt' --include='*.log' --include='nohup.out' --include='*/' /root/rtk/logs /mnt/rtk >> /var/log/cron.log 2>&1
+* * * * * sleep 30; rsync -ah --include='*.txt' --include='*.log' --include='*/' /root/rtklua/History /mnt/rtklua >> /var/log/cron.log 2>&1
+
+# Prune old database backups every 5 minutes
+*/5 * * * * bash -c "sleep 45; . /root/.env.sh; /mnt/database/history/prune-history.sh >> /var/log/cron.log 2>&1"
+# Mandatory empty line at end of file

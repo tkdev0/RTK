@@ -82,7 +82,7 @@ int clif_accept(int fd) {
 
 	printf("[LOGIN] Client connected from: %s\n", ip);
 
-	FILE* packetlog = fopen("packetlog.txt", "a+");
+	FILE* packetlog = fopen("logs/packetlog.txt", "a+");
 	if (packetlog == NULL)
 	{
 		printf("Please run with sudo- cant open packet log\n");
@@ -377,7 +377,7 @@ int clif_parse(int fd) {
 
 	//printf("%s\n", OutStr);
 
-	FILE* packetlog = fopen("packetlog.txt", "a+");
+	FILE* packetlog = fopen("logs/packetlog.txt", "a+");
 	if (packetlog == NULL)
 	{
 		printf("Please run with sudo- cant open packet log\n");

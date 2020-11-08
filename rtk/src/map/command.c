@@ -447,10 +447,13 @@ int command_shutdown(USER* sd, char* line, lua_State* state) {
 	return 0;
 }
 int command_luareload(USER* sd, char* line, lua_State* state) {
+	system("rsync -avh --include='*.lua' --include='*/' --exclude='*' --delete /mnt/rtklua /home");
+	printf("Lua scripts synced with Host!");
+	
 	int errors = sl_reload(state);
 
 	nullpo_ret(errors, sd);
-	clif_sendminitext(sd, "LUA Scripts reloaded!");
+	clif_sendminitext(sd, "Lua scripts reloaded!");
 	return errors;
 }
 int command_magicreload(USER* sd, char* line, lua_State* state) {
@@ -1591,6 +1594,9 @@ int command_reloadcreations(USER* sd, char* line, lua_State* state) {
 }
 
 int command_reloadmaps(USER* sd, char* line, lua_State* state) {
+	system("rsync -avh --include='*.map' --include='*/' --exclude='*' --delete /mnt/rtkmaps/Accepted /home/rtkmaps");
+	printf("Maps synced with Host!");
+
 	map_reload();
 
 	if (char_fd > 0 && session[char_fd] != NULL) {
@@ -1617,6 +1623,9 @@ int command_reloadmaps(USER* sd, char* line, lua_State* state) {
 
 	nullpo_ret(0, sd);
 	clif_sendminitext(sd, "Maps reloaded!");
+
+	command_reloadwarps(sd, line, state);
+
 	return 0;
 }
 

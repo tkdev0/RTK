@@ -118,7 +118,7 @@ Tools = {
     -- This function is executed whenever a GM speaks "/testlua" or "/tl".
     -- --------------------------------------------------------------------
 	testLua = function(player)
-		player.registryString["waypoints"] = ""
+		-- player.registryString["waypoints"] = ""
 		player:sendAnimation(11)
 		player:playSound(29)
 

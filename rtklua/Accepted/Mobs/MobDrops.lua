@@ -149,8 +149,8 @@ local _mobDropsTable = {
 			rates = {34}
 		},
 		rareLoot = {
-			items = {"topaz", "mica"},
-			rates = {8, 17}
+			items = {"mica", "topaz"},
+			rates = {20, 8}
 		}
 	},
 	["fierce_mouse"] = {
@@ -188,14 +188,14 @@ local _mobDropsTable = {
 		loot = {
 			items = {"topaz"},
 			amounts = {1},
-			rates = {25}
+			rates = {20}
 		}
 	},
 	["large_centipede"] = {
 		loot = {
 			items = {"topaz"},
 			amounts = {1},
-			rates = {20}
+			rates = {15}
 		}
 	},
 

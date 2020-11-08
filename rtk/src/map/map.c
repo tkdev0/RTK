@@ -1517,7 +1517,7 @@ int config_read(const char* cfg_file) {
 		if (sscanf(line, "%[^:]: %[^\r\n]", r1, r2) == 2) {
 			//MAP
 			if (strcmpi(r1, "map_ip") == 0) {
-				//get_actual_ip(r2,map_ip_s);
+				strcpy(r2, getenv("MAP_IP"));
 				get_actual_ip(r2);
 				map_ip_s[15] = '\0';
 				map_ip = inet_addr(map_ip_s);
@@ -1528,6 +1528,7 @@ int config_read(const char* cfg_file) {
 				//LOGIN
 			}
 			else if (strcmpi(r1, "loginip") == 0) {
+				strcpy(r2, getenv("LOGIN_IP"));
 				get_actual_ip2(r2);
 				log_ip_s[15] = '\0';
 				log_ip = inet_addr(log_ip_s);
@@ -1600,19 +1601,19 @@ int config_read(const char* cfg_file) {
 				d_rate = atoi(r2);
 			}
 			else if (strcmpi(r1, "sql_ip") == 0) {
-				strcpy(sql_ip, r2);
+				strcpy(sql_ip, getenv("MYSQL_IP"));
 			}
 			else if (strcmpi(r1, "sql_port") == 0) {
 				sql_port = atoi(r2);
 			}
 			else if (strcmpi(r1, "sql_id") == 0) {
-				strcpy(sql_id, r2);
+				strcpy(sql_id, getenv("MYSQL_USER"));
 			}
 			else if (strcmpi(r1, "sql_pw") == 0) {
-				strcpy(sql_pw, r2);
+				strcpy(sql_pw, getenv("MYSQL_PASSWORD"));
 			}
 			else if (strcmpi(r1, "sql_db") == 0) {
-				strcpy(sql_db, r2);
+				strcpy(sql_db, getenv("MYSQL_DATABASE"));
 			}
 		}
 	}
@@ -1807,17 +1808,21 @@ int do_init(int argc, char** argv) {
 	add_log("");
 	add_log("RetroTK Map Server Started.\n");
 	sql_handle = Sql_Malloc();
+
 	if (sql_handle == NULL)
 	{
 		Sql_ShowDebug(sql_handle);
 		exit(EXIT_FAILURE);
 	}
+
 	if (SQL_ERROR == Sql_Connect(sql_handle, sql_id, sql_pw, sql_ip, (uint16)sql_port, sql_db))
 	{
 		Sql_ShowDebug(sql_handle);
 		Sql_Free(sql_handle);
 		exit(EXIT_FAILURE);
 	}
+
+	printf("Connected to %s at %s:%d as '%s'.\n", sql_db, sql_ip, sql_port, sql_id);
 
 	if (SQL_ERROR == Sql_Query(sql_handle, "UPDATE `Character` SET `ChaOnline` = 0 WHERE `ChaOnline` = 1")) {
 		Sql_ShowDebug(sql_handle);
@@ -1855,6 +1860,7 @@ int do_init(int argc, char** argv) {
 	authdb_init();
 	timer_insert(450000, 450000, change_time_char, i, i);
 
+	printf("Connecting to char server at %s:%d\n", char_ip_s, char_port);
 	timer_insert(1000, 1000, check_connect_char, char_ip, char_port);
 
 	cronjobtimer = timer_insert(1000, 1000, map_cronjob, 0, 0);

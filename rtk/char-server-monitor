@@ -1,4 +1,0 @@
-until /home/RTK/rtk/char-server; do
-    echo "Char server crashed with exit code $?.  Respawning..." >&2
-    sleep 1
-done

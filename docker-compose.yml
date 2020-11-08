@@ -1,0 +1,72 @@
+version: '3.4'
+services:
+  database:
+    image: mysql/mysql-server:5.7
+    command: "--innodb_buffer_pool_size=3200M --innodb_flush_log_at_trx_commit=2 --max_connections=300"
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_PORT
+    ports:
+      - ${MYSQL_PORT}:${MYSQL_PORT}
+    volumes:
+      - ./database/scripts:/docker-entrypoint-initdb.d # These scripts get executed in alphabetical order the first time this container is created
+      - ./database/data:/var/lib/mysql
+  
+  backup:
+    image: databack/mysql-backup:latest
+    restart: unless-stopped
+    environment:
+      - DB_SERVER=${MYSQL_IP}
+      - DB_PORT=${MYSQL_PORT}
+      - DB_USER=${MYSQL_USER}
+      - DB_PASS=${MYSQL_PASSWORD}
+      - DB_NAMES=${MYSQL_DATABASE}
+      - DB_DUMP_FREQ
+      - DB_DUMP_BEGIN=+${DB_DUMP_FREQ}
+      - DB_DUMP_DEBUG
+      - DB_DUMP_TARGET
+      - DB_DUMP_SAFECHARS
+      - COMPRESSION
+      - DB_DUMP_BY_SCHEMA
+      - MYSQLDUMP_OPTS
+    volumes:
+      - ./database/history:/db
+    depends_on:
+      - database
+
+  server:
+    build:
+      context: .
+      target: rtk
+    working_dir: /root/rtk
+    command: /usr/local/app/entrypoint/cron-init.sh
+    restart: unless-stopped
+    environment:
+      - LOGIN_IP
+      - MAP_IP
+      - MYSQL_IP=${MYSQL_IP}
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_DATABASE
+      - BACKUPS_LIMIT
+    ports:
+      - 2000:2000
+      - 2001:2001
+      - 2005:2005
+    volumes:
+      - ./database/history:/mnt/database/history
+      - ./rtk/logs:/mnt/rtk/logs
+      - ./rtklua/Accepted:/mnt/rtklua/Accepted
+      - ./rtklua/Developers:/mnt/rtklua/Developers
+      - ./rtklua/History:/mnt/rtklua/History
+      - ./rtkmaps/Accepted:/mnt/rtkmaps/Accepted
+      - type: tmpfs
+        target: /root/rtk/logs
+      - type: tmpfs
+        target: /root/rtklua/History
+    depends_on:
+      - database
