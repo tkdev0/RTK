@@ -18,7 +18,7 @@
 #include "mob.h";
 //for debug command
 #include "socket.h"
-#include "crypt.h"
+#include "tk_crypt.h"
 #include "db_mysql.h"
 #include "malloc.h"
 #include "rndm.h"

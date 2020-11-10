@@ -8,7 +8,7 @@
 #include "char.h"
 #include "saveif.h"
 #include "mmo.h"
-#include "crypt.h"
+#include "tk_crypt.h"
 #include "char_db.h"
 
 static const int packet_len_table[] = {3, 0};

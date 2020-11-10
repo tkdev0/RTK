@@ -7,7 +7,7 @@
 #include "char.h"
 #include "logif.h"
 #include "mmo.h"
-#include "crypt.h"
+#include "tk_crypt.h"
 #include "char_db.h"
 
 static const int packet_len_table[] = { 3, 20, 43, 40, 52,0, 0 };
@@ -26,7 +26,7 @@ int check_connect_login(int ip, int port) {
 		memcpy(WFIFOP(login_fd, 5), login_id, 32);
 		memcpy(WFIFOP(login_fd, 37), login_pw, 32);
 		set_packet_indexes(WFIFOP(login_fd, 0));
-		crypt(WFIFOP(login_fd, 0));
+		tk_crypt(WFIFOP(login_fd, 0));
 		WFIFOSET(login_fd, 69 + 3);
 	}
 	return 0;

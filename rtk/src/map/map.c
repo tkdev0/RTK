@@ -18,7 +18,7 @@
 #include "../common/timer.h"
 #include "version.h"
 #include "map.h"
-#include "crypt.h"
+#include "tk_crypt.h"
 #include "clif.h"
 #include "intif.h"
 #include "mmo.h"
@@ -2119,7 +2119,7 @@ int nmail_read(USER* sd, int post) {
 		strcpy(WFIFOP(sd->fd,len+11),sql_get_str(2));
 		len+=strlen(sql_get_str(2))+1;
 		WFIFOW(sd->fd,1)=SWAP16(len+7);
-		crypt(WFIFOP(sd->fd,0));
+		tk_crypt(WFIFOP(sd->fd,0));
 		WFIFOSET(sd->fd,len+10);
 		sql_free_row();
 		sql_request("UPDATE nmail SET new=0 WHERE touser='%s' AND mail_id=%d",sd->status.name,post);

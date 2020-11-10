@@ -1,48 +1,8 @@
-#include "crypt.h"
+#include "tk_crypt.h"
 #include "md5calc.h"
 
 static char enckey[] = "Urk#nI7ni";
 
-// XOR Crypt Code
-//----------------------------
-/*
-void crypt(char *buff, char *eKey="NexonInc.", unsigned char mNum=0) {
-	unsigned int packet_len;
-	unsigned char packet_inc;
-	int i, j, k, l;
-	unsigned short group;
-	buff++;
-	packet_len = SWAP16(*(unsigned short*)buff)-2;
-	buff+=3;
-	packet_inc = *buff;
-	buff++;
-	//XOR 1
-	for (i=0;i < packet_len;i++)
-		*(buff+i) = *(buff+i) ^ enckey[i%9];
-
-	group = packet_len / 9 + 1;
-	k = 0;
-	//XOR 2
-	for (i=0;i < group;i++) {
-		for (j=1;j<= 9;j++) {
-			if (k >= packet_len) {
-				i = group;
-				break;
-			}
-			if (i == packet_inc)
-				l = 0;
-			else
-				l = i;
-			*(buff+k) = *(buff+i*9+j-1) ^ (l%256);
-			k++;
-		}
-	}
-	//XOR 3
-	for (i=0;i < packet_len;i++)
-		*(buff+i) = *(buff+i) ^ packet_inc;
-}
-
-*/
 char* generate_hashvalues(const char* name, char* outbuffer, int buflen)
 {
 	struct cvs_MD5Context context;
@@ -144,30 +104,7 @@ char* generate_key2(unsigned char* packet, char* table, char* keyout, int fromcl
 	return keyout;
 }
 
-/*char* generate_key(const char *name, char *outbuffer, int buflen)
-{
-	struct cvs_MD5Context context;
-	unsigned char checksum[16];
-	int i;
-
-	if(buflen < 10)
-		return 0;
-
-	cvs_MD5Init(&context);
-	cvs_MD5Update(&context, name, strlen(name));
-	cvs_MD5Final(checksum, &context);
-
-	for(i = 0; i < 5; i++)
-	{
-		sprintf(&checksum[8], "%02x", (unsigned int) checksum[i]);
-		outbuffer[i*2] = checksum[8];
-		outbuffer[i*2 + 1] = checksum[9];
-	}
-
-	outbuffer[9] = 0;
-	return outbuffer;
-}*/
-void crypt(char* buff)
+void tk_crypt(char* buff)
 {
 	unsigned int Group = 0;
 	unsigned int GroupCount = 0;
@@ -204,7 +141,7 @@ void crypt(char* buff)
 		}
 	}
 }
-void crypt2(char* buff, char* key)
+void tk_crypt2(char* buff, char* key)
 {
 	unsigned int Group = 0;
 	unsigned int GroupCount = 0;

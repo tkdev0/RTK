@@ -15,7 +15,7 @@
 #include "malloc.h"
 #include "timer.h"
 #include "mmo.h"
-#include "crypt.h"
+#include "tk_crypt.h"
 #include "cbasetypes.h"
 
 #define SOCKET_ERROR (-1)

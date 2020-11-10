@@ -6,7 +6,7 @@
 #include "login.h"
 #include "socket.h"
 #include "mmo.h"
-#include "crypt.h"
+#include "tk_crypt.h"
 #include "intif.h"
 #include "clif.h"
 #include "timer.h"
@@ -121,7 +121,7 @@ int intif_parse_connectconfirm(int fd) {
 		WFIFOB(RFIFOW(fd, 2), 6) = '\x00';
 		WFIFOB(RFIFOW(fd, 2), 7) = '\x00';
 		set_packet_indexes(WFIFOP(RFIFOW(fd, 2), 0));
-		crypt(WFIFOP(RFIFOW(fd, 2), 0));
+		tk_crypt(WFIFOP(RFIFOW(fd, 2), 0));
 		WFIFOSET(RFIFOW(fd, 2), 8 + 3);
 		int len;
 		int newlen;

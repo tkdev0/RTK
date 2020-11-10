@@ -8,7 +8,7 @@
 #include "timer.h"
 #include "version.h"
 #include "login.h"
-#include "crypt.h"
+#include "tk_crypt.h"
 #include "clif.h"
 #include "zlib.h"
 #include "db_mysql.h"
